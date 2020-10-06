@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var participantRouter = require('./routes/participantRouter');
 var candidateRouter = require('./routes/candidateRouter');
@@ -28,6 +29,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//cors
+app.use(cors());
+app.options('*', cors());
 
 // Body parse setup to handle post request
 app.use(bodyParser.urlencoded({

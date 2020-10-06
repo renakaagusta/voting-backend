@@ -15,10 +15,10 @@ var participantSchema = mongoose.Schema({
         requird: true
     },
     voting: {
-        voting_id: {
+        number: {
             type: String,
         },
-        voting_at: {
+        time: {
             type: Date
         }
     },
