@@ -14,6 +14,9 @@ router.route('/')
 router.route('/all')
 .get(participantController.index)
 
+router.route('/vote')
+.put(participantController.vote)
+
 router.route('/:id')
 .get(participantController.view)
 .post(participantController.new)

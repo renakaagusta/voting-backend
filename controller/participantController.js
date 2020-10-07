@@ -25,6 +25,8 @@ exports.new = function (req, res) {
     participant.name = req.body.name;
     participant.nim = req.body.nim;
     participant.email = req.body.email;
+    participant.session.min = new Date(req.body.sessionMin);
+    participant.session.max = new Date(req.body.sessionMax);
 
     // Save and validate
     participant.save(function (err) {
@@ -56,7 +58,9 @@ exports.update = function (req, res) {
         {$set: {
             name: req.body.name,
             nim: req.body.nim,
-            email: req.body.email
+            email: req.body.email,
+            'session.min': req.body.sessionMin,
+            'session.max': req.body.sessionMax,
         }})
     .then((participant)=>{
         if(participant) {
@@ -66,7 +70,37 @@ exports.update = function (req, res) {
             });
         } else {
             res.json({
-                message: "participants not found",
+                message: "participant not found",
+                data: {}
+            });
+        }
+    })
+    .catch((err)=>{
+        res.json({
+            message: "error",
+            data: err
+        })
+    })
+};
+
+// Handle vote actions
+exports.vote = function (req, res) {
+    Participant.findOneAndUpdate(
+        {_id: req.body.id_participant},
+        {$set: {
+            'voting.id_candidate': req.body.id_candidate,
+            'voting.time': Date(),
+            'voting.counted': 0, 
+        }})
+    .then((participant)=>{
+        if(participant) {
+            res.json({
+                message: "participant voted",
+                data: participant
+            });
+        } else {
+            res.json({
+                message: "participant not found",
                 data: {}
             });
         }

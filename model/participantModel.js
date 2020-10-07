@@ -12,16 +12,27 @@ var participantSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        requird: true
+        required: true
     },
     voting: {
-        number: {
+        id_candidate: {
             type: String,
         },
         time: {
-            type: Date
-        }
+            type: Date,
+        },
+        counted: {
+            type: Number,
+        } 
     },
+    session: {
+        min: {
+            type: Date,
+        },
+        max: {
+            type: Date,
+        }
+    }
 });
 
 var Participant = module.exports = mongoose.model('participant', participantSchema);
