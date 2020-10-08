@@ -5,8 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
+var authenticationRouter = require('./routes/authenticationRouter');
 var participantRouter = require('./routes/participantRouter');
 var candidateRouter = require('./routes/candidateRouter');
+var sessionRouter = require('./routes/sessionRouter');
 
 // Import body parse
 let bodyParser = require('body-parser');
@@ -40,8 +42,10 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
+app.use('/api/v1/authentication', authenticationRouter);
 app.use('/api/v1/participant', participantRouter);
 app.use('/api/v1/candidate', candidateRouter);
+app.use('/api/v1/session', sessionRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

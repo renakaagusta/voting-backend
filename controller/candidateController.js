@@ -106,8 +106,8 @@ exports.update = function (req, res) {
     }); 
 };
 
-// Handle vote actions
-exports.vote = function (req, res) {
+// Handle count actions
+exports.count = function (req, res) {
     Candidate.findById (req.body.id, function(err, candidate) {
         if(err) throw err;
         candidate.total_vote++;

@@ -14,8 +14,8 @@ router.route('/')
 router.route('/all')
 .get(candidateController.index)
 
-router.route('/vote')
-.put(candidateController.vote);
+router.route('/count')
+.put(candidateController.count);
 
 router.route('/:id')
 .get(candidateController.view)
