@@ -43,7 +43,7 @@ exports.view = function (req, res) {
         if (err)
             res.send(err);
         res.json({
-            message: "sessions Details Loading...",
+            message: "sessions Detail Loading...",
             data: session
         });
     });

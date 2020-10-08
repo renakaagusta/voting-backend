@@ -1,5 +1,6 @@
 // Import Participant model
 Participant = require('../model/participantModel');
+Session = require('../model/sessionModel');
 
 // Handle index actions
 exports.index = function (req, res) {
@@ -25,6 +26,8 @@ exports.new = function (req, res) {
     participant.name = req.body.name;
     participant.nim = req.body.nim;
     participant.email = req.body.email;
+    participant.session.id = req.body.sessionId;
+    participant.session.number = req.body.sessionNumber;
     participant.session.min = new Date(req.body.sessionMin);
     participant.session.max = new Date(req.body.sessionMax);
 
@@ -32,9 +35,26 @@ exports.new = function (req, res) {
     participant.save(function (err) {
         if (err)
             res.json(err);
-    res.json({
-        message: "New Participant Created!",
-        data: participant
+
+        Session.findById (req.body.sessionId, function(err, session) {
+            if(err) throw err;
+            session.total_participant++;
+            Session.findOneAndUpdate(
+                {_id: session._id},
+                {$set: session}
+            )
+            .then((session)=>{
+                if(session) {
+
+                } else {
+                
+                }
+            })
+        })
+    
+        res.json({
+            message: "New Participant Created!",
+            data: participant
         });
     });
 };
@@ -45,7 +65,7 @@ exports.view = function (req, res) {
         if (err)
             res.send(err);
         res.json({
-            message: "participants Details Loading...",
+            message: "participants Detail Loading...",
             data: participant
         });
     });
@@ -53,17 +73,72 @@ exports.view = function (req, res) {
 
 // Handle update actions
 exports.update = function (req, res) {
+    var moveSession = false;
+    var oldSession = {};
+    var newSession = {};
+
+    Participant.findById(req.params.id, function(err, participant) {
+        if(err) throw err;
+        if(participant.session.id != req.body.sessionId) {
+            moveSession = true;
+            oldSession = participant.session;
+            newSession = {
+                id: req.body.sessionId,
+                number: req.body.sessionNumber,
+                start: req.body.sessionMin,
+                end: req.body.sessionMax,
+            }
+        }
+    });
+    
     Participant.findOneAndUpdate(
         {_id: req.params.id},
         {$set: {
             name: req.body.name,
             nim: req.body.nim,
             email: req.body.email,
+            'session.id': req.body.sessionId,
+            'session.number': req.body.sessionNumber,
             'session.min': req.body.sessionMin,
             'session.max': req.body.sessionMax,
         }})
     .then((participant)=>{
         if(participant) {
+            
+            if(moveSession) {
+                Session.findById (newSession.id, function(err, session) {
+                    if(err) throw err;
+                    session.total_participant++;
+                    Session.findOneAndUpdate(
+                        {_id: session._id},
+                        {$set: session}
+                    )
+                    .then((session)=>{
+                        if(session) {
+        
+                        } else {
+                        
+                        }
+                    })
+                })
+
+                Session.findById (oldSession.id, function(err, session) {
+                    if(err) throw err;
+                    session.total_participant--;
+                    Session.findOneAndUpdate(
+                        {_id: session._id},
+                        {$set: session}
+                    )
+                    .then((session)=>{
+                        if(session) {
+        
+                        } else {
+                        
+                        }
+                    })
+                })
+            }
+
             res.json({
                 message: "participant updated",
                 data: participant

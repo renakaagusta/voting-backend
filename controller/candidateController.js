@@ -63,7 +63,7 @@ exports.view = function (req, res) {
         if (err)
             res.send(err);
         res.json({
-            message: "candidates Details Loading...",
+            message: "candidates Detail Loading...",
             data: candidate
         });
     });

@@ -26,6 +26,12 @@ var participantSchema = mongoose.Schema({
         } 
     },
     session: {
+        id: {
+            type: String,
+        },
+        number: {
+            type: Number
+        },
         min: {
             type: Date,
         },
