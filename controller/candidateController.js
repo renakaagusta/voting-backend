@@ -73,16 +73,17 @@ exports.view = function (req, res) {
 exports.update = function (req, res) {
     id = req.params.id
     upload(req, res, err => {
+        console.log("req: "+JSON.stringify(req.body))
         if (err) throw err
         Candidate.findOneAndUpdate(
             {_id: id},
             {$set: {
                 name: req.body.name,
                 number: req.body.number,
-                image: image,
                 'description.short': req.body.shortDescription,
                 'description.vision': req.body.visionDescription,
-                'description.mission': req.body.missionDescription
+                'description.mission': req.body.missionDescription,
+                image: image,
             }})
         .then((candidate)=>{
             if(candidate) {

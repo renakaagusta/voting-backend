@@ -195,6 +195,21 @@ exports.delete = function (req, res) {
         }, function (err, participant) {
             if (err)
                 res.send(err);
+            Session.findById (participant.session.id, function(err, session) {
+                if(err) throw err;
+                session.total_participant--;
+                Session.findOneAndUpdate(
+                    {_id: session._id},
+                    {$set: session}
+                )
+                .then((session)=>{
+                    if(session) {
+    
+                    } else {
+                    
+                    }
+                })
+            })
         res.json({
             status: "success",
             message: "Participant Deleted!"
