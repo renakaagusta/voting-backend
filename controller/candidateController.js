@@ -7,7 +7,7 @@ var path = require('path');
 var id = ""
 
 const storage = multer.diskStorage({
-    destination : path.join(__dirname + './../../voting-frontend/public/'),
+    destination : path.join(__dirname + './../../'),
     filename: function(req, file, cb){
         if(path.extname(file.originalname)!='.pdf') {
             cb(null, id + '.jpg');
