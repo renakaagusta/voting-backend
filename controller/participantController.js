@@ -85,8 +85,8 @@ exports.update = function (req, res) {
             newSession = {
                 id: req.body.sessionId,
                 number: req.body.sessionNumber,
-                start: req.body.sessionMin,
-                end: req.body.sessionMax,
+                start: new Date(req.body.sessionMin),
+                end: new Date(req.body.sessionMax),
             }
         }
     });
@@ -99,8 +99,8 @@ exports.update = function (req, res) {
             email: req.body.email,
             'session.id': req.body.sessionId,
             'session.number': req.body.sessionNumber,
-            'session.min': req.body.sessionMin,
-            'session.max': req.body.sessionMax,
+            'session.min': new Date(req.body.sessionMin),
+            'session.max': new Date(req.body.sessionMax),
         }})
     .then((participant)=>{
         if(participant) {
@@ -190,29 +190,35 @@ exports.vote = function (req, res) {
 
 // Handle delete actions
 exports.delete = function (req, res) { 
-    Participant.remove({
-            _id: req.params.id
-        }, function (err, participant) {
-            if (err)
-                res.send(err);
-            Session.findById (participant.session.id, function(err, session) {
-                if(err) throw err;
-                session.total_participant--;
-                Session.findOneAndUpdate(
-                    {_id: session._id},
-                    {$set: session}
-                )
-                .then((session)=>{
-                    if(session) {
-    
-                    } else {
-                    
-                    }
-                })
+    Participant.findById(req.params.id, function (err, participant) {
+        if (err)
+            res.send(err);
+        
+        Session.findById (participant.session.id, function(err, session) {
+            if(err) throw err;
+            session.total_participant--;
+            console.log("sessions id:"+session._id)
+            Session.findOneAndUpdate(
+                {_id: session._id},
+                {$set: session}
+            )
+            .then((session)=>{
+                if(session) {
+                    Participant.deleteOne({
+                            _id: req.params.id
+                        }, function (err, participant) {
+                            if (err)
+                                res.send(err);
+
+                        res.json({
+                            status: "success",
+                            message: "Participant Deleted!"
+                        });
+                    });
+                } else {
+                
+                }
             })
-        res.json({
-            status: "success",
-            message: "Participant Deleted!"
-        });
+        })
     });
 };

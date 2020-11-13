@@ -17,6 +17,9 @@ router.route('/all')
 router.route('/count')
 .put(candidateController.count);
 
+router.route('/:id/upload')
+.put(candidateController.upload)
+
 router.route('/:id')
 .get(candidateController.view)
 .put(candidateController.update)

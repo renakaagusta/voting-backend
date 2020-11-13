@@ -1,5 +1,6 @@
 // Import Session model
 Session = require('../model/sessionModel');
+Participant = require('../model/participantModel');
 
 // Handle index actions
 exports.index = function (req, res) {
@@ -55,15 +56,29 @@ exports.update = function (req, res) {
         {_id: req.params.id},
         {$set: {
             start: new Date(req.body.start),
-            end: new Date(req.body.end),
-            
+            end: new Date(req.body.end)
         }})
     .then((session)=>{
         if(session) {
-            res.json({
-                message: "session updated",
-                data: session
-            });
+            Participant.updateMany({
+                    'session.number': session.number,
+                }, 
+                {
+                    '$set': {                    
+                        'session.min': new Date(req.body.start),
+                        'session.max': new Date(req.body.end)
+                    }
+                },
+                function(err, participants) {
+                    if(err) throw err
+
+                    console.log(JSON.stringify(participants))
+
+                    res.json({
+                        message: "session updated",
+                        data: session
+                    });
+            })
         } else {
             res.json({
                 message: "session not found",

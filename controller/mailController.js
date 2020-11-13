@@ -32,6 +32,11 @@ exports.send = function (req, res) {
                 {
                     filename: 'Kartu Pemilihan_'+req.body.name+'_'+req.body.nim+'.png',
                     content: votingCardImage
+                },
+                {
+                    filename:'Tata Cara Pemilihan PEMIRA HIMATIPA UGM 2020.pdf', 
+                    contentType: 'application/pdf',
+                    path: 'http://5.181.217.29:8080/procedure.pdf'
                 }
             ]
         };

@@ -14,6 +14,9 @@ router.route('/')
 router.route('/all')
 .get(settingController.index)
 
+router.route('/upload-procedure')
+.put(settingController.upload)
+
 router.route('/:id')
 .get(settingController.view)
 .put(settingController.update)

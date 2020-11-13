@@ -1,6 +1,21 @@
 // Import Setting model
 Setting = require('../model/settingModel');
 
+var multer = require('multer');
+var path = require('path');
+
+const storage = multer.diskStorage({
+    destination : path.join(__dirname + './../../voting-frontend/public/'),
+    filename: function(req, file, cb){
+        console.log(file.originalname);
+        cb(null,'procedure.pdf')
+    }
+});
+
+const upload = multer({
+    storage : storage
+}).single('file');
+
 // Handle index actions
 exports.index = function (req, res) {
     Setting.get(function (err, settings){
@@ -83,6 +98,16 @@ exports.update = function (req, res) {
     })
 };
 
+// Handle upload actions
+exports.upload = function (req, res) {
+    upload(req, res, err => {
+        if(err) throw err;
+
+        res.json({
+            message: "success upload"
+        })
+    })
+}
 
 // Handle delete actions
 exports.delete = function (req, res) { 

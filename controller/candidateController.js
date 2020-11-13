@@ -5,30 +5,32 @@ var multer = require('multer');
 var path = require('path');
 
 var id = ""
-var image = "image url";
 
 const storage = multer.diskStorage({
-    destination : path.join(__dirname + './../../voting-frontend/public/images/'),
+    destination : path.join(__dirname + './../../voting-frontend/public/'),
     filename: function(req, file, cb){
-        cb(null, id + path.extname(file.originalname));
-        image  = id + path.extname(file.originalname);
+        if(path.extname(file.originalname)!='.pdf') {
+            cb(null, id + '.jpg');
+        } else {
+            cb(null, id + '.pdf'); 
+        }
     }
 });
 
 const upload = multer({
     storage : storage
-}).single('image');
+}).single('file');
 
 // Handle index actions
 exports.index = function (req, res) {
     Candidate.get(function (err, candidates){
         if (err) {
-            res.json({
+            return res.json({
                 status: "error",
                 message: err,
             });
         }
-        res.json({
+        return res.json({
             status: "success",
             message: "Candidate Added Successfully",
             data: candidates
@@ -41,16 +43,19 @@ exports.new = function (req, res) {
     var candidate = new Candidate();
     candidate.name = req.body.name;
     candidate.number = req.body.number;
-    candidate.image = path.join(__dirname + './../../voting-frontend/public/images/avatar.jpg');
+    candidate.image = 'avatar.jpg';
+    candidate.cv = " ";
     candidate.description.short = req.body.shortDescription;
     candidate.description.mission = req.body.missionDescription;
     candidate.description.vision = req.body.visionDescription;
 
+    console.log(JSON.stringify(candidate))
+
     // Save and validate
     candidate.save(function (err) {
         if (err)
-            res.json(err);
-    res.json({
+            return res.json(err);
+    return res.json({
         message: "New Candidate Created!",
         data: candidate
         });
@@ -61,8 +66,8 @@ exports.new = function (req, res) {
 exports.view = function (req, res) {
     Candidate.findById(req.params.id, function (err, candidate) {
         if (err)
-            res.send(err);
-        res.json({
+            return res.send(err);
+        return res.json({
             message: "candidates Detail Loading...",
             data: candidate
         });
@@ -72,40 +77,63 @@ exports.view = function (req, res) {
 // Handle update actions
 exports.update = function (req, res) {
     id = req.params.id
-    upload(req, res, err => {
-        console.log("req: "+JSON.stringify(req.body))
-        if (err) throw err
-        Candidate.findOneAndUpdate(
-            {_id: id},
-            {$set: {
-                name: req.body.name,
-                number: req.body.number,
-                'description.short': req.body.shortDescription,
-                'description.vision': req.body.visionDescription,
-                'description.mission': req.body.missionDescription,
-                image: image,
-            }})
-        .then((candidate)=>{
-            if(candidate) {
-                res.json({
-                    message: "candidate updated",
-                    data: candidate
-                });
-            } else {
-                res.json({
-                    message: "candidates not found",
-                    data: {}
-                });
-            }
+    Candidate.findOneAndUpdate(
+        {_id: id},
+        {$set: {
+            name: req.body.name,
+            number: req.body.number,
+            'description.short': req.body.shortDescription,
+            'description.vision': req.body.visionDescription,
+            'description.mission': req.body.missionDescription,
+        }})
+    .then((candidate)=>{
+        if(candidate) {
+            return res.json({
+                message: "candidate updated",
+                data: candidate
+            });
+        } else {
+            return res.json({
+                message: "candidates not found",
+                data: {}
+            });
+        }
+    })
+    .catch((err)=>{
+        return res.json({
+            message: "error",
+            data: err
         })
-        .catch((err)=>{
-            res.json({
-                message: "error",
-                data: err
-            })
-        })
-    }); 
+    })
 };
+
+// Handle upload actions
+exports.upload = function (req, res) {
+    type = req.body.type;
+    id = req.params.id;
+    upload(req, res, err => {
+        if(err) throw err;
+
+        Candidate.findOneAndUpdate(
+            {
+                _id: id
+            },
+            {
+                '$set' : {
+                    image: id+".jpg",
+                    cv: id+".pdf",
+                }
+            },
+            function(err,candidate) {
+                if(err) throw err
+                
+                return res.json({
+                    message: "success upload"
+                })
+            }
+        )
+    })
+}
 
 // Handle count actions
 exports.count = function (req, res) {
@@ -118,12 +146,12 @@ exports.count = function (req, res) {
         )
         .then((candidate)=>{
             if(candidate) {
-                res.json({
+                return res.json({
                     message: "candidate voted",
                     data: candidate
                 });
             } else {
-                res.json({
+                return res.json({
                     message: "candidate not found",
                     data: {}
                 });
@@ -138,8 +166,8 @@ exports.delete = function (req, res) {
             _id: req.params.id
         }, function (err, candidate) {
             if (err)
-                res.send(err);
-        res.json({
+                return res.send(err);
+        return res.json({
             status: "success",
             message: "Candidate Deleted!"
         });

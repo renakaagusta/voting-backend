@@ -30,6 +30,10 @@ var settingSchema = mongoose.Schema({
         type: Date,
         required: true
     },
+    procedure: {
+        type: String,
+        default: "procedure.pdf",
+    },
 });
 
 var Setting = module.exports = mongoose.model('setting', settingSchema);

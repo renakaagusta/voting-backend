@@ -12,7 +12,13 @@ var candidateSchema = mongoose.Schema({
     },
     image: {
         type: String,
-        required: true
+        required: true,
+        default: ""
+    },
+    cv: {
+        type: String,
+        required: true,
+        default: ""
     },
     total_vote: {
         type: Number,
