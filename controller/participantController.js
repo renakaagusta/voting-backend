@@ -12,7 +12,7 @@ exports.index = function (req, res) {
       });
     }
 
-    participants.reverse();
+    participants = [].concat(participants).reverse();
 
     res.json({
       status: "success",
