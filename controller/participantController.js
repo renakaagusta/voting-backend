@@ -11,6 +11,9 @@ exports.index = function (req, res) {
         message: err,
       });
     }
+
+    participants.reverse();
+
     res.json({
       status: "success",
       message: "Participant Added Successfully",
