@@ -5,7 +5,7 @@ var multer = require('multer');
 var path = require('path');
 
 const storage = multer.diskStorage({
-    destination : path.join(__dirname + './../../voting-frontend/public/'),
+    destination : path.join(__dirname + './../../'),
     filename: function(req, file, cb){
         console.log(file.originalname);
         cb(null,'procedure.pdf')
