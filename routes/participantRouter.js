@@ -17,7 +17,7 @@ router.route('/all')
 router.route('/vote')
 .put(participantController.vote)
 
-route.route('/force-delete/:id')
+router.route('/force-delete/:id')
 .delete(participantController.force_delete);
 
 router.route('/:id')
