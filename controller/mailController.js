@@ -36,7 +36,7 @@ exports.send = function (req, res) {
                 {
                     filename:'Tata Cara Pemilihan PEMIRA HIMATIPA UGM 2020.pdf', 
                     contentType: 'application/pdf',
-                    path: 'http://5.181.217.29:8080/procedure.pdf'
+                    path: 'http://pemira.himatipaugm.com/procedure.pdf'
                 }
             ]
         };
