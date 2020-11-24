@@ -10,9 +10,8 @@ var participantSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    email: {
-        type: String,
-        required: true
+    email_at: {
+        type: Date,
     },
     voting: {
         id_candidate: {
@@ -38,6 +37,10 @@ var participantSchema = mongoose.Schema({
         max: {
             type: Date,
         }
+    },
+    created_at: {
+        type: Date,
+        default: new Date(),
     }
 });
 

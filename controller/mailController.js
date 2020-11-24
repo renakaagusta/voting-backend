@@ -1,52 +1,72 @@
-var nodemailer = require('nodemailer');
-Setting = require('../model/settingModel');
+var nodemailer = require("nodemailer");
+Setting = require("../model/settingModel");
+Participant = require("../model/participantModel");
 
 // Handle index actions
 exports.send = function (req, res) {
-    Setting.get(function(err, settings) {
-        if (err) {
-            res.json({
-                status: "error",
-                message: err,
-            });
+  Setting.get(function (err, settings) {
+    if (err) {
+      res.json({
+        status: "error",
+        message: err,
+      });
+    }
+
+    const setting = settings[0];
+
+    var votingCardImage = new Buffer(
+      req.body.image.split("base64,")[1],
+      "base64"
+    );
+
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: setting.email.email,
+        pass: setting.email.password,
+      },
+    });
+
+    var mailOptions = {
+      from: setting.email.email,
+      to: req.body.to,
+      subject: "PEMIRA FMIPA UNS 2020",
+      html:
+        "<h1>Halo " +
+        req.body.name +
+        "</h1><p>Kami mengundang anda untuk mengikuti PEMIRA FMIPA UNS 2020. Berikut kami lampirkan kartu pemilihan anda beserta dengan tata cara pemilihan.</p>",
+      attachments: [
+        {
+          filename:
+            "Kartu Pemilihan_" + req.body.name + "_" + req.body.nim + ".png",
+          content: votingCardImage,
+        },
+        {
+          filename: "Tata Cara Pemilihan PEMIRA FMIPA UNS 2020.pdf",
+          contentType: "application/pdf",
+          path: "http://pemira.himatipaugm.com/procedure.pdf",
+        },
+      ],
+    };
+
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) throw err;
+
+      Participant.findOneAndUpdate(
+        {
+          _id: req.body.participantId,
+        },
+        {
+          $set: {
+            email_at: new Date(),
+          },
+        },
+        function (err, participant) {
+          res.json({
+            message: "New Email sent!",
+          });
         }
-
-        const setting = settings[0];
-
-        var votingCardImage = new Buffer(req.body.image.split("base64,")[1], "base64");
-
-        var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: setting.email.email,
-                pass: setting.email.password
-            }
-        });
-
-        var mailOptions = {
-            from: setting.email.email,
-            to: req.body.to,
-            subject: 'PEMIRA HIMATIPA UGM 2020',
-            html: '<h1>Halo '+req.body.name+'</h1><p>Kami mengundang anda untuk mengikuti PEMIRA HIMATIPA UGM 2020. Berikut kami lampirkan kartu pemilihan anda beserta dengan tata cara pemilihan.</p>',
-            attachments: [
-                {
-                    filename: 'Kartu Pemilihan_'+req.body.name+'_'+req.body.nim+'.png',
-                    content: votingCardImage
-                },
-                {
-                    filename:'Tata Cara Pemilihan PEMIRA HIMATIPA UGM 2020.pdf', 
-                    contentType: 'application/pdf',
-                    path: 'http://pemira.himatipaugm.com/procedure.pdf'
-                }
-            ]
-        };
-
-        transporter.sendMail(mailOptions, (err, info) => {
-            if (err) throw err;
-            
-            res.json({
-                message: "New Email sent!",
-            });
-        });
-    })
+      );
+    });
+  });
 };

@@ -6,7 +6,7 @@ Session = require("../model/sessionModel");
 exports.index = function (req, res) {
   Participant.get(function (err, participants) {
     if (err) {
-      res.json({
+      return res.json({
         status: "error",
         message: err,
       });
@@ -14,10 +14,41 @@ exports.index = function (req, res) {
 
     participants = [].concat(participants).reverse();
 
-    res.json({
+    return res.json({
       status: "success",
       message: "Participant Added Successfully",
       data: participants,
+    });
+  });
+};
+
+// Handle index actions
+exports.indexByPage = async function (req, res) {
+  var page = req.params.page;
+  try {
+    var totalParticipant = await Participant.count()
+    var participants = await Participant.find().sort({_id:-1}).limit(10).skip((page-1)*10).exec()
+
+    return res.json({
+      status: "success",
+      message: "Participant Added Successfully",
+      data: {
+        participants: participants,
+        totalPage: Math.ceil(totalParticipant/10),
+      },
+    });
+  } catch(err) {
+    return res.send(err);
+  }
+};
+
+// Handle view actions
+exports.view = function (req, res) {
+  Participant.findById(req.params.id, function (err, participant) {
+    if (err) return res.send(err);
+    return res.json({
+      message: "participants Detail Loading...",
+      data: participant,
     });
   });
 };
@@ -49,19 +80,8 @@ exports.new = function (req, res) {
       );
     });
 
-    res.json({
+    return res.json({
       message: "New Participant Created!",
-      data: participant,
-    });
-  });
-};
-
-// Handle view actions
-exports.view = function (req, res) {
-  Participant.findById(req.params.id, function (err, participant) {
-    if (err) res.send(err);
-    res.json({
-      message: "participants Detail Loading...",
       data: participant,
     });
   });
@@ -131,12 +151,12 @@ exports.update = function (req, res) {
           });
         }
 
-        res.json({
+        return res.json({
           message: "participant updated",
           data: participant,
         });
       } else {
-        res.json({
+        return res.json({
           message: "participant not found",
           data: {},
         });
@@ -164,19 +184,19 @@ exports.vote = function (req, res) {
   )
     .then((participant) => {
       if (participant) {
-        res.json({
+        return res.json({
           message: "participant voted",
           data: participant,
         });
       } else {
-        res.json({
+        return res.json({
           message: "participant not found",
           data: {},
         });
       }
     })
     .catch((err) => {
-      res.json({
+      return res.json({
         message: "error",
         data: err,
       });
@@ -186,7 +206,7 @@ exports.vote = function (req, res) {
 // Handle delete actions
 exports.delete = function (req, res) {
   Participant.findById(req.params.id, function (err, participant) {
-    if (err) res.send(err);
+    if (err) return res.send(err);
 
     Session.findById(participant.session.id, function (err, session) {
       if (err) throw err;
@@ -202,7 +222,7 @@ exports.delete = function (req, res) {
               function (err, participant) {
                 if (err) res.send(err);
 
-                res.json({
+                return res.json({
                   status: "success",
                   message: "Participant Deleted!",
                 });

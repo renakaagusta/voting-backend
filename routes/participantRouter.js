@@ -20,6 +20,9 @@ router.route('/vote')
 router.route('/force-delete/:id')
 .delete(participantController.force_delete);
 
+router.route('/page/:page')
+.get(participantController.indexByPage);
+
 router.route('/:id')
 .get(participantController.view)
 .post(participantController.new)
