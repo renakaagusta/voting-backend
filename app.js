@@ -29,6 +29,7 @@ mongoose.connect(
     }
   }
 );
+
 var db = mongoose.connection;
 
 var app = express();
