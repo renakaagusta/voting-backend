@@ -10,6 +10,9 @@ var participantSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+    },
     email_at: {
         type: Date,
     },
