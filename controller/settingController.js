@@ -16,8 +16,17 @@ const upload = multer({
     storage : storage
 }).single('file');
 
-var ip = ['36.81.8.39', '115.178.245.1', "120.188.87.161","182.2.70.49","36.82.16.96"];
-
+var ip = [
+    "36.81.8.39",
+    "115.178.245.1",
+    "120.188.87.161",
+    "182.2.70.49",
+    "36.82.16.96",
+    "182.1.113.100",
+    "36.72.212.123",
+    "180.242.214.231",
+  ];
+  
 // Handle index actions
 exports.index = function (req, res) {
     if(!ip.includes(req.ip.replace('::ffff:', ''))){
