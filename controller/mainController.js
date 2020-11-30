@@ -29,7 +29,7 @@ exports.login = function (req, res) {
 // Handle announcement actions
 exports.announcement = function (req, res) {
     if(!ip.includes(req.ip))
-        return;
+        return res.status(500).send();
 
   console.log("ip: "+JSON.stringify(ip));
     Setting.find({}, function(err, announcement) {
