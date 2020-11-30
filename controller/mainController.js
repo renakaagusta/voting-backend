@@ -7,8 +7,9 @@ var ip = ['36.81.8.39', '115.178.245.1'];
 
 // Handle login actions
 exports.login = function (req, res) {
-    if(!ip.includes(req.ip.replace(('"::ffff:', '')))){
-        console.log(req.ip.replace(('"::ffff:', '')));
+    if(!ip.includes(req.ip.replace('::ffff:', ''))){
+        console.log(req.ip.replace('::ffff:', ''));
+
         return res.status(500).send();
     }
     Setting.find({

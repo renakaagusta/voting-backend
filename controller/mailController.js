@@ -53,7 +53,7 @@ exports.send = function (req, res) {
         {
           filename: "Tata Cara Pemilihan PEMIRA FMIPA UNS 2020.pdf",
           contentType: "application/pdf",
-          path: "http://localhost/procedure.pdf",
+          path: "http://pemira.fmipauns.com/procedure.pdf",
         },
       ],
     };
