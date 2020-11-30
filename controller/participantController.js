@@ -1,7 +1,7 @@
 // Import Participant model
 Participant = require("../model/participantModel");
 Session = require("../model/sessionModel");
-var externalip = require("externalip");
+var ip = ['36.81.8.39'];
 
 // Handle index actions
 exports.index = function (req, res) {
@@ -91,8 +91,7 @@ exports.new = function (req, res) {
   participant.session.id = req.body.sessionId;
   participant.session.number = req.body.sessionNumber;
   participant.session.min = new Date(req.body.sessionMin);
-  participant.session.max = new D();
-  ate(req.body.sessionMax);
+  participant.session.max = new Date(req.body.sessionMax);
 
   // Save and validate
   participant.save(function (err) {

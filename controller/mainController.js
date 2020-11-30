@@ -3,6 +3,8 @@ Participant = require('../model/participantModel');
 Candidate = require('../model/candidateModel');
 Session = require('../model/sessionModel');
 
+var ip = ['36.81.8.39'];
+
 // Handle login actions
 exports.login = function (req, res) {
     Setting.find({
@@ -26,7 +28,8 @@ exports.login = function (req, res) {
 
 // Handle announcement actions
 exports.announcement = function (req, res) {
-    var ip = req.ip;
+    if(!ip.includes(req.ip))
+        return;
 
   console.log("ip: "+JSON.stringify(ip));
     Setting.find({}, function(err, announcement) {
