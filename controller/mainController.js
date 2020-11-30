@@ -26,6 +26,9 @@ exports.login = function (req, res) {
 
 // Handle announcement actions
 exports.announcement = function (req, res) {
+    var ip = req.ip;
+
+  console.log("ip: "+JSON.stringify(ip));
     Setting.find({}, function(err, announcement) {
         if(err)
             throw err;
