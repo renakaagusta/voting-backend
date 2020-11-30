@@ -16,9 +16,15 @@ const upload = multer({
     storage : storage
 }).single('file');
 
+var ip = ['36.81.8.39', '115.178.245.1'];
+
 // Handle index actions
 exports.index = function (req, res) {
-    var ip = req.ip;
+    if(!ip.includes(req.ip.replace('::ffff:', ''))){
+        console.log(req.ip.replace('::ffff:', ''));
+
+        return res.status(500).send();
+    }
 
   console.log("ip: "+JSON.stringify(ip));
     Setting.get(function (err, settings){
@@ -38,8 +44,11 @@ exports.index = function (req, res) {
 
 // Handle create actions
 exports.new = function (req, res) {
-    if(!ip.includes(req.ip))
+    if(!ip.includes(req.ip.replace('::ffff:', ''))){
+        console.log(req.ip.replace('::ffff:', ''));
+
         return res.status(500).send();
+    }
 
     var setting = new Setting();
     setting.email.email = req.body.emailEmail;
@@ -61,6 +70,11 @@ exports.new = function (req, res) {
 
 // Handle view actions
 exports.view = function (req, res) {
+    if(!ip.includes(req.ip.replace('::ffff:', ''))){
+        console.log(req.ip.replace('::ffff:', ''));
+
+        return res.status(500).send();
+    }
     Setting.findById(req.params.id, function (err, setting) {
         if (err)
             res.send(err);
@@ -73,8 +87,16 @@ exports.view = function (req, res) {
 
 // Handle update actions
 exports.update = function (req, res) {
-    if(!ip.includes(req.ip))
+    if(!ip.includes(req.ip.replace('::ffff:', ''))){
+        console.log(req.ip.replace('::ffff:', ''));
+
         return res.status(500).send();
+    }
+    if(!ip.includes(req.ip.replace('::ffff:', ''))){
+        console.log(req.ip.replace('::ffff:', ''));
+
+        return res.status(500).send();
+    }
     Setting.findOneAndUpdate(
         {_id: req.params.id},
         {$set: {
@@ -107,8 +129,11 @@ exports.update = function (req, res) {
 
 // Handle upload actions
 exports.upload = function (req, res) {
-    if(!ip.includes(req.ip))
+    if(!ip.includes(req.ip.replace('::ffff:', ''))){
+        console.log(req.ip.replace('::ffff:', ''));
+
         return res.status(500).send();
+    }
     upload(req, res, err => {
         if(err) throw err;
 
@@ -120,8 +145,11 @@ exports.upload = function (req, res) {
 
 // Handle delete actions
 exports.delete = function (req, res) { 
-    if(!ip.includes(req.ip))
+    if(!ip.includes(req.ip.replace('::ffff:', ''))){
+        console.log(req.ip.replace('::ffff:', ''));
+
         return res.status(500).send();
+    }
     Setting.remove({
             _id: req.params.id
         }, function (err, setting) {

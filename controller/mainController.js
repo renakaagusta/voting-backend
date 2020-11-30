@@ -3,7 +3,7 @@ Participant = require('../model/participantModel');
 Candidate = require('../model/candidateModel');
 Session = require('../model/sessionModel');
 
-var ip = ['36.81.8.39'];
+var ip = ['36.81.8.39', '115.178.245.1'];
 
 // Handle login actions
 exports.login = function (req, res) {

@@ -2,8 +2,15 @@ var nodemailer = require("nodemailer");
 Setting = require("../model/settingModel");
 Participant = require("../model/participantModel");
 
+var ip = ['36.81.8.39', '115.178.245.1'];
+
 // Handle index actions
 exports.send = function (req, res) {
+  if(!ip.includes(req.ip.replace('::ffff:', ''))){
+    console.log(req.ip.replace('::ffff:', ''));
+
+    return res.status(500).send();
+}
   Setting.get(function (err, settings) {
     if (err) {
       res.json({
