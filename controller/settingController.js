@@ -18,6 +18,9 @@ const upload = multer({
 
 // Handle index actions
 exports.index = function (req, res) {
+    var ip = req.ip;
+
+  console.log("ip: "+JSON.stringify(ip));
     Setting.get(function (err, settings){
         if (err) {
             res.json({

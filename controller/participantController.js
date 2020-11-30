@@ -25,10 +25,6 @@ exports.index = function (req, res) {
 
 // Handle search actions
 exports.search = function (req, res) {
-  var ip = req.ip;
-
-
-  console.log("ip: "+JSON.stringify(ip));
   Participant.find({
     name: {
       $regex: req.params.name
