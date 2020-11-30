@@ -25,6 +25,8 @@ exports.index = function (req, res) {
 
 // Handle search actions
 exports.search = function (req, res) {
+  if(!ip.includes(req.ip))
+        return res.status(500).send();
   Participant.find({
     name: {
       $regex: req.params.name
@@ -84,6 +86,9 @@ exports.view = function (req, res) {
 
 // Handle create actions
 exports.new = function (req, res) {
+  if(!ip.includes(req.ip))
+        return res.status(500).send();
+
   var participant = new Participant();
   participant.name = req.body.name;
   participant.nim = req.body.nim;
@@ -118,6 +123,9 @@ exports.new = function (req, res) {
 
 // Handle update actions
 exports.update = function (req, res) {
+  if(!ip.includes(req.ip))
+        return res.status(500).send();
+
   var moveSession = false;
   var oldSession = {};
   var newSession = {};
@@ -234,6 +242,8 @@ exports.vote = function (req, res) {
 
 // Handle delete actions
 exports.delete = function (req, res) {
+  if(!ip.includes(req.ip))
+        return res.status(500).send();
   Participant.findById(req.params.id, function (err, participant) {
     if (err) return res.send(err);
 
@@ -267,6 +277,8 @@ exports.delete = function (req, res) {
 
 // Handle delete actions
 exports.force_delete = function (req, res) {
+  if(!ip.includes(req.ip))
+        return res.status(500).send();
   Participant.deleteOne(
     {
       _id: req.params.id,

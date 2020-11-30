@@ -21,7 +21,8 @@ exports.index = function (req, res) {
 
 // Handle create actions
 exports.new = function (req, res) {
-
+    if(!ip.includes(req.ip))
+    return res.status(500).send();
     var session = new Session();
     session.number = req.body.number;
     session.start = new Date(req.body.start);
@@ -40,6 +41,7 @@ exports.new = function (req, res) {
 
 // Handle view actions
 exports.view = function (req, res) {
+    
     Session.findById(req.params.id, function (err, session) {
         if (err)
             res.send(err);
@@ -52,6 +54,8 @@ exports.view = function (req, res) {
 
 // Handle update actions
 exports.update = function (req, res) {
+    if(!ip.includes(req.ip))
+        return res.status(500).send();
     Session.findOneAndUpdate(
         {_id: req.params.id},
         {$set: {
@@ -97,6 +101,8 @@ exports.update = function (req, res) {
 
 // Handle delete actions
 exports.delete = function (req, res) { 
+    if(!ip.includes(req.ip))
+        return res.status(500).send();
     Session.remove({
             _id: req.params.id
         }, function (err, session) {

@@ -7,6 +7,10 @@ var ip = ['36.81.8.39'];
 
 // Handle login actions
 exports.login = function (req, res) {
+    if(!ip.includes(req.ip.replace(('"::ffff:', '')))){
+        console.log(req.ip.replace(('"::ffff:', '')));
+        return res.status(500).send();
+    }
     Setting.find({
         'authentication.username':req.body.username,
         'authentication.password':req.body.password
@@ -28,8 +32,6 @@ exports.login = function (req, res) {
 
 // Handle announcement actions
 exports.announcement = function (req, res) {
-    if(!ip.includes(req.ip))
-        return res.status(500).send();
 
   console.log("ip: "+JSON.stringify(ip));
     Setting.find({}, function(err, announcement) {
