@@ -12,6 +12,7 @@ var ip = [
     "182.1.113.100",
     "36.72.212.123",
     "180.242.214.231",
+    "182.2.41.152"
   ];
 // Handle login actions
 exports.login = function (req, res) {
