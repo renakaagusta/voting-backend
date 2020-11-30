@@ -83,7 +83,9 @@ exports.send = function (req, res) {
           },
         },
         function (err, participant) {
-          res.json({
+          if (err) return res.status(500).send(err);    
+
+          return res.json({
             message: "New Email sent!",
           });
         }
