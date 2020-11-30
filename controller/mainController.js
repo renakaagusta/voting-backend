@@ -33,7 +33,7 @@ exports.login = function (req, res) {
 // Handle announcement actions
 exports.announcement = function (req, res) {
     if(!ip.includes(req.ip.replace('::ffff:', ''))){
-        console.log(JSON.stringify(req.ip).replace('"::ffff:', ''));
+        console.log(JSON.stringify(req.ip).replace('::ffff:', ''));
 
         return res.status(500).send();
     }
