@@ -14,6 +14,9 @@ router.route('/')
 router.route('/all')
 .get(participantController.index)
 
+router.route('/search/:name')
+.get(participantController.search)
+
 router.route('/vote')
 .put(participantController.vote)
 

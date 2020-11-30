@@ -1,6 +1,7 @@
 // Import Participant model
 Participant = require("../model/participantModel");
 Session = require("../model/sessionModel");
+var externalip = require("externalip");
 
 // Handle index actions
 exports.index = function (req, res) {
@@ -22,22 +23,54 @@ exports.index = function (req, res) {
   });
 };
 
+// Handle search actions
+exports.search = function (req, res) {
+  var ip = req.ip;
+
+
+  console.log("ip: "+JSON.stringify(ip));
+  Participant.find({
+    name: {
+      $regex: req.params.name
+    }
+  }, function (err, participants) {
+    if (err) {
+      return res.json({
+        status: "error",
+        message: err,
+      });
+    }
+
+    participants = [].concat(participants).reverse();
+
+    return res.json({
+      status: "success",
+      message: "Participant Added Successfully",
+      data: participants,
+    });
+  });
+};
+
 // Handle index actions
 exports.indexByPage = async function (req, res) {
   var page = req.params.page;
   try {
-    var totalParticipant = await Participant.count()
-    var participants = await Participant.find().sort({_id:-1}).limit(10).skip((page-1)*10).exec()
+    var totalParticipant = await Participant.count();
+    var participants = await Participant.find()
+      .sort({ _id: -1 })
+      .limit(10)
+      .skip((page - 1) * 10)
+      .exec();
 
     return res.json({
       status: "success",
       message: "Participant Added Successfully",
       data: {
         participants: participants,
-        totalPage: Math.ceil(totalParticipant/10),
+        totalPage: Math.ceil(totalParticipant / 10),
       },
     });
-  } catch(err) {
+  } catch (err) {
     return res.send(err);
   }
 };
@@ -62,7 +95,8 @@ exports.new = function (req, res) {
   participant.session.id = req.body.sessionId;
   participant.session.number = req.body.sessionNumber;
   participant.session.min = new Date(req.body.sessionMin);
-  participant.session.max = new Date(req.body.sessionMax);
+  participant.session.max = new D();
+  ate(req.body.sessionMax);
 
   // Save and validate
   participant.save(function (err) {

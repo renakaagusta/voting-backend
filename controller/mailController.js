@@ -20,7 +20,9 @@ exports.send = function (req, res) {
     );
 
     var transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.zoho.com",
+      port: 465,
+      secure: true,
       auth: {
         user: setting.email.email,
         pass: setting.email.password,
@@ -44,13 +46,15 @@ exports.send = function (req, res) {
         {
           filename: "Tata Cara Pemilihan PEMIRA FMIPA UNS 2020.pdf",
           contentType: "application/pdf",
-          path: "http://pemira.himatipaugm.com/procedure.pdf",
+          path: "http://localhost/procedure.pdf",
         },
       ],
     };
 
     transporter.sendMail(mailOptions, (err, info) => {
-      if (err) throw err;
+      console.log("error: "+JSON.stringify(err));
+      console.log("info: "+JSON.stringify(info));
+      if (err) return res.status(500).send(err);
 
       Participant.findOneAndUpdate(
         {
