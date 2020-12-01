@@ -14,6 +14,8 @@ var ip = [
   "182.2.41.152",
   "182.0.198.123",
   "36.65.160.63",
+
+  "36.74.208.155"
 ];
 // Handle index actions
 exports.send = function (req, res) {
