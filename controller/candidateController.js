@@ -1,218 +1,219 @@
 // Import Candidate model
-Candidate = require('../model/candidateModel');
+Candidate = require("../model/candidateModel");
 
-var multer = require('multer');
-var path = require('path');
+var multer = require("multer");
+var path = require("path");
 
-var id = ""
+var id = "";
 
 var ip = [
-    "36.81.8.39",
-    "115.178.245.1",
-    "120.188.87.161",
-    "182.2.70.49",
-    "36.82.16.96",
-    "182.1.113.100",
-    "36.72.212.123",
-    "180.242.214.231",
-    "182.2.41.152",
-    "182.0.198.123",
-    "36.65.160.63",
-
-  "36.74.208.155"
-  ];
+  "36.81.8.39",
+  "115.178.245.1",
+  "120.188.87.161",
+  "182.2.70.49",
+  "36.82.16.96",
+  "182.1.113.100",
+  "36.72.212.123",
+  "180.242.214.231",
+  "182.2.41.152",
+  "182.0.198.123",
+  "36.65.160.63",
+  "182.2.40.27",
+  "36.74.208.155",
+];
 
 const storage = multer.diskStorage({
-    destination : path.join(__dirname + './../../'),
-    filename: function(req, file, cb){
-        if(path.extname(file.originalname)!='.pdf') {
-            cb(null, id + '.jpg');
-        } else {
-            cb(null, id + '.pdf'); 
-        }
+  destination: path.join(__dirname + "./../../"),
+  filename: function (req, file, cb) {
+    if (path.extname(file.originalname) != ".pdf") {
+      cb(null, id + ".jpg");
+    } else {
+      cb(null, id + ".pdf");
     }
+  },
 });
 
 const upload = multer({
-    storage : storage
-}).single('file');
+  storage: storage,
+}).single("file");
 
 // Handle index actions
 exports.index = function (req, res) {
-    Candidate.get(function (err, candidates){
-        if (err) {
-            return res.json({
-                status: "error",
-                message: err,
-            });
-        }
-        return res.json({
-            status: "success",
-            message: "Candidate Added Successfully",
-            data: candidates
-        });
+  Candidate.get(function (err, candidates) {
+    if (err) {
+      return res.json({
+        status: "error",
+        message: err,
+      });
+    }
+    return res.json({
+      status: "success",
+      message: "Candidate Added Successfully",
+      data: candidates,
     });
+  });
 };
 
 // Handle create actions
 exports.new = function (req, res) {
-    if(!ip.includes(req.ip.replace('::ffff:', ''))){
-        console.log(req.ip.replace('::ffff:', ''));
+  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
+    console.log(req.ip.replace("::ffff:", ""));
 
-        return res.status(500).send();
-    }
+    return res.status(500).send();
+  }
 
-    var candidate = new Candidate();
-    candidate.name = req.body.name;
-    candidate.number = req.body.number;
-    candidate.image = 'avatar.jpg';
-    candidate.cv = " ";
-    candidate.description.short = req.body.shortDescription;
-    candidate.description.mission = req.body.missionDescription;
-    candidate.description.vision = req.body.visionDescription;
+  var candidate = new Candidate();
+  candidate.name = req.body.name;
+  candidate.number = req.body.number;
+  candidate.image = "avatar.jpg";
+  candidate.cv = " ";
+  candidate.description.short = req.body.shortDescription;
+  candidate.description.mission = req.body.missionDescription;
+  candidate.description.vision = req.body.visionDescription;
 
-    console.log(JSON.stringify(candidate))
+  console.log(JSON.stringify(candidate));
 
-    // Save and validate
-    candidate.save(function (err) {
-        if (err)
-            return res.json(err);
+  // Save and validate
+  candidate.save(function (err) {
+    if (err) return res.json(err);
     return res.json({
-        message: "New Candidate Created!",
-        data: candidate
-        });
+      message: "New Candidate Created!",
+      data: candidate,
     });
+  });
 };
 
 // Handle view actions
 exports.view = function (req, res) {
-    
-    Candidate.findById(req.params.id, function (err, candidate) {
-        if (err)
-            return res.send(err);
-        return res.json({
-            message: "candidates Detail Loading...",
-            data: candidate
-        });
+  Candidate.findById(req.params.id, function (err, candidate) {
+    if (err) return res.send(err);
+    return res.json({
+      message: "candidates Detail Loading...",
+      data: candidate,
     });
+  });
 };
 
 // Handle update actions
 exports.update = function (req, res) {
-    if(!ip.includes(req.ip.replace('::ffff:', ''))){
-        console.log(req.ip.replace('::ffff:', ''));
+  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
+    console.log(req.ip.replace("::ffff:", ""));
 
-        return res.status(500).send();
+    return res.status(500).send();
+  }
+  id = req.params.id;
+  Candidate.findOneAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        name: req.body.name,
+        number: req.body.number,
+        "description.short": req.body.shortDescription,
+        "description.vision": req.body.visionDescription,
+        "description.mission": req.body.missionDescription,
+      },
     }
-    id = req.params.id
-    Candidate.findOneAndUpdate(
-        {_id: id},
-        {$set: {
-            name: req.body.name,
-            number: req.body.number,
-            'description.short': req.body.shortDescription,
-            'description.vision': req.body.visionDescription,
-            'description.mission': req.body.missionDescription,
-        }})
-    .then((candidate)=>{
-        if(candidate) {
-            return res.json({
-                message: "candidate updated",
-                data: candidate
-            });
-        } else {
-            return res.json({
-                message: "candidates not found",
-                data: {}
-            });
-        }
-    })
-    .catch((err)=>{
+  )
+    .then((candidate) => {
+      if (candidate) {
         return res.json({
-            message: "error",
-            data: err
-        })
+          message: "candidate updated",
+          data: candidate,
+        });
+      } else {
+        return res.json({
+          message: "candidates not found",
+          data: {},
+        });
+      }
     })
+    .catch((err) => {
+      return res.json({
+        message: "error",
+        data: err,
+      });
+    });
 };
 
 // Handle upload actions
 exports.upload = function (req, res) {
-    if(!ip.includes(req.ip.replace('::ffff:', ''))){
-        console.log(req.ip.replace('::ffff:', ''));
+  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
+    console.log(req.ip.replace("::ffff:", ""));
 
-        return res.status(500).send();
-    }
-    type = req.body.type;
-    id = req.params.id;
-    upload(req, res, err => {
-        if(err) throw err;
+    return res.status(500).send();
+  }
+  type = req.body.type;
+  id = req.params.id;
+  upload(req, res, (err) => {
+    if (err) throw err;
 
-        Candidate.findOneAndUpdate(
-            {
-                _id: id
-            },
-            {
-                '$set' : {
-                    image: id+".jpg",
-                    cv: id+".pdf",
-                }
-            },
-            function(err,candidate) {
-                if(err) throw err
-                
-                return res.json({
-                    message: "success upload"
-                })
-            }
-        )
-    })
-}
+    Candidate.findOneAndUpdate(
+      {
+        _id: id,
+      },
+      {
+        $set: {
+          image: id + ".jpg",
+          cv: id + ".pdf",
+        },
+      },
+      function (err, candidate) {
+        if (err) throw err;
+
+        return res.json({
+          message: "success upload",
+        });
+      }
+    );
+  });
+};
 
 // Handle count actions
 exports.count = function (req, res) {
-    if(!ip.includes(req.ip.replace('::ffff:', ''))){
-        console.log(req.ip.replace('::ffff:', ''));
+  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
+    console.log(req.ip.replace("::ffff:", ""));
 
-        return res.status(500).send();
-    }
-    Candidate.findById (req.body.id, function(err, candidate) {
-        if(err) throw err;
-        candidate.total_vote++;
-        Candidate.findOneAndUpdate(
-            {_id: candidate._id},
-            {$set: candidate}
-        )
-        .then((candidate)=>{
-            if(candidate) {
-                return res.json({
-                    message: "candidate voted",
-                    data: candidate
-                });
-            } else {
-                return res.json({
-                    message: "candidate not found",
-                    data: {}
-                });
-            }
-        })
-    })
-}
+    return res.status(500).send();
+  }
+  Candidate.findById(req.body.id, function (err, candidate) {
+    if (err) throw err;
+    candidate.total_vote++;
+    Candidate.findOneAndUpdate(
+      { _id: candidate._id },
+      { $set: candidate }
+    ).then((candidate) => {
+      if (candidate) {
+        return res.json({
+          message: "candidate voted",
+          data: candidate,
+        });
+      } else {
+        return res.json({
+          message: "candidate not found",
+          data: {},
+        });
+      }
+    });
+  });
+};
 
 // Handle delete actions
-exports.delete = function (req, res) { 
-    if(!ip.includes(req.ip.replace('::ffff:', ''))){
-        console.log(req.ip.replace('::ffff:', ''));
+exports.delete = function (req, res) {
+  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
+    console.log(req.ip.replace("::ffff:", ""));
 
-        return res.status(500).send();
+    return res.status(500).send();
+  }
+  Candidate.remove(
+    {
+      _id: req.params.id,
+    },
+    function (err, candidate) {
+      if (err) return res.send(err);
+      return res.json({
+        status: "success",
+        message: "Candidate Deleted!",
+      });
     }
-    Candidate.remove({
-            _id: req.params.id
-        }, function (err, candidate) {
-            if (err)
-                return res.send(err);
-        return res.json({
-            status: "success",
-            message: "Candidate Deleted!"
-        });
-    });
+  );
 };
