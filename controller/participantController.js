@@ -17,8 +17,11 @@ var ip = [
   "182.2.40.27",
   "36.74.208.155",
   "182.2.71.32",
-  "182.0.237.81"
+  "182.0.237.81",
+  "103.79.154.187",
+  "114.5.109.44",
 ];
+
 // Handle index actions
 exports.index = function (req, res) {
   if (!ip.includes(req.ip.replace("::ffff:", ""))) {
