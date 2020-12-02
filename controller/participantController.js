@@ -48,7 +48,6 @@ exports.index = function (req, res) {
 
 // Handle search actions
 exports.search = function (req, res) {
-  
   Participant.find(
     {
       name: {
@@ -71,7 +70,7 @@ exports.search = function (req, res) {
         data: participants,
       });
     }
-  );
+  ).maxTimeMS(100);;
 };
 
 // Handle index actions
@@ -81,7 +80,7 @@ exports.indexByPage = async function (req, res) {
   try {
     var totalParticipant = await Participant.count();
     var participants = await Participant.find()
-      .sort({ _id: -1 })
+      .sort({ 'session.number': 1 })
       .limit(10)
       .skip((page - 1) * 10)
       .exec();
@@ -125,10 +124,10 @@ exports.new = function (req, res) {
 
   // Save and validate
   participant.save(function (err) {
-    if (err) res.json(err);
+    if (err) return res.status(500).json(err);
 
     Session.findById(req.body.sessionId, function (err, session) {
-      if (err) throw err;
+      if (err) return res.status(500).json(err);
       session.total_participant++;
       Session.findOneAndUpdate({ _id: session._id }, { $set: session }).then(
         (session) => {
