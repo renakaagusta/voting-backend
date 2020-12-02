@@ -11,7 +11,7 @@ var ip = [
   "182.1.113.100",
   "36.72.212.123",
   "180.242.214.231",
-  "182.2.41.152",
+  "182.2.41.152",     
   "182.0.198.123",
   "36.65.160.63",
   "182.2.40.27",
@@ -27,11 +27,7 @@ var ip = [
 
 // Handle index actions
 exports.send = function (req, res) {
-  if(!ip.includes(req.ip.replace('::ffff:', ''))){
-    console.log(req.ip.replace('::ffff:', ''));
-
-    return res.status(500).send();
-}
+  
   Setting.get(function (err, settings) {
     if (err) {
       res.json({
