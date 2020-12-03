@@ -44,9 +44,7 @@ exports.send = function (req, res) {
     );
 
     var transporter = nodemailer.createTransport({
-      host: "smtp.zoho.com",
-      port: 465,
-      secure: true,
+      service: "Gmail",
       auth: {
         user: setting.email.email,
         pass: setting.email.password,
