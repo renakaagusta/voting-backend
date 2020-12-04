@@ -107,11 +107,7 @@ exports.view = function (req, res) {
 
 // Handle update actions
 exports.update = function (req, res) {
-  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
-    console.log(req.ip.replace("::ffff:", ""));
-
-    return res.status(500).send();
-  }
+  
 
   Setting.findOneAndUpdate(
     { _id: req.params.id },
