@@ -267,11 +267,6 @@ exports.vote = function (req, res) {
 
 // Handle delete actions
 exports.delete = function (req, res) {
-  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
-    console.log(req.ip.replace("::ffff:", ""));
-
-    return res.status(500).send();
-  }
 
   Participant.findById(req.params.id, function (err, participant) {
     if (err) return res.send(err);
