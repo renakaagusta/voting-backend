@@ -74,8 +74,6 @@ exports.new = function (req, res) {
   candidate.description.mission = req.body.missionDescription;
   candidate.description.vision = req.body.visionDescription;
 
-  console.log(JSON.stringify(candidate));
-
   // Save and validate
   candidate.save(function (err) {
     if (err) return res.json(err);
