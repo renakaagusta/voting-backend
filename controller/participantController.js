@@ -27,11 +27,6 @@ var ip = [
 
 // Handle index actions
 exports.index = function (req, res) {
-  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
-    console.log(req.ip.replace("::ffff:", ""));
-
-    return res.status(500).send();
-  }
   Participant.get(function (err, participants) {
     if (err) {
       return res.json({
