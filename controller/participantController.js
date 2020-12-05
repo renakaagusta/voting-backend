@@ -85,8 +85,8 @@ exports.indexByPage = async function (req, res) {
     var totalParticipant = await Participant.count();
     var participants = await Participant.find()
       .sort({ 'voting': 1 })
-      .limit(30)
-      .skip((page - 1) * 30)
+      .limit(20)
+      .skip((page - 1) * 20)
       .exec();
 
     return res.json({
@@ -94,7 +94,7 @@ exports.indexByPage = async function (req, res) {
       message: "Participant Added Successfully",
       data: {
         participants: participants,
-        totalPage: Math.ceil(totalParticipant / 30),
+        totalPage: Math.ceil(totalParticipant / 20),
       },
     });
   } catch (err) {
