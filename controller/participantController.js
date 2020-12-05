@@ -94,7 +94,7 @@ exports.indexByPage = async function (req, res) {
       message: "Participant Added Successfully",
       data: {
         participants: participants,
-        totalPage: Math.ceil(totalParticipant / 10),
+        totalPage: Math.ceil(totalParticipant / 30),
       },
     });
   } catch (err) {
