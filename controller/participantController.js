@@ -83,7 +83,9 @@ exports.indexByPage = async function (req, res) {
   var page = req.params.page;
   try {
     var totalParticipant = await Participant.count();
-    var participants = await Participant.find()
+    var participants = await Participant.find({
+      voting: null
+    })
       .sort({ 'session.number': 1 })
       .limit(10)
       .skip((page - 1) * 10)
