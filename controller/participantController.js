@@ -965,7 +965,6 @@ exports.new = function (req, res) {
     }
   ];
 
-
   _participants.forEach((_participant)=>{
     var participant = new Participant();
     participant.name = _participant.name;
@@ -989,11 +988,6 @@ exports.new = function (req, res) {
             }
           }
         );
-      });
-  
-      return res.json({
-        message: "New Participant Created!",
-        data: participant,
       });
     });
   })
