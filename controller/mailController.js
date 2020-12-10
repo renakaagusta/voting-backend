@@ -68,7 +68,7 @@ exports.send = function (req, res) {
         {
           filename: "Tata Cara Pemilihan PEMILU HIMATEKK ITS 2020.pdf",
           contentType: "application/pdf",
-          path: "http://pemira.fmipauns.com/procedure.pdf",
+          path: "http://pemilu.himatekkits.com/procedure.pdf",
         },
       ],
     };
