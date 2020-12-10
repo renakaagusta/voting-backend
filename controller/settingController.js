@@ -65,11 +65,7 @@ exports.index = function (req, res) {
 
 // Handle create actions
 exports.new = function (req, res) {
-  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
-    console.log(req.ip.replace("::ffff:", ""));
-
-    return res.status(500).send();
-  }
+ 
 
   var setting = new Setting();
   setting.email.email = req.body.emailEmail;
@@ -90,12 +86,7 @@ exports.new = function (req, res) {
 
 // Handle view actions
 exports.view = function (req, res) {
-  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
-    console.log(req.ip.replace("::ffff:", ""));
-
-    return res.status(500).send();
-  }
-
+ 
   Setting.findById(req.params.id, function (err, setting) {
     if (err) res.send(err);
     res.json({
@@ -144,12 +135,7 @@ exports.update = function (req, res) {
 
 // Handle upload actions
 exports.upload = function (req, res) {
-  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
-    console.log(req.ip.replace("::ffff:", ""));
-
-    return res.status(500).send();
-  }
-
+ 
   upload(req, res, (err) => {
     if (err) throw err;
 
@@ -161,12 +147,6 @@ exports.upload = function (req, res) {
 
 // Handle delete actions
 exports.delete = function (req, res) {
-  if (!ip.includes(req.ip.replace("::ffff:", ""))) {
-    console.log(req.ip.replace("::ffff:", ""));
-
-    return res.status(500).send();
-  }
-
   Setting.remove(
     {
       _id: req.params.id,
