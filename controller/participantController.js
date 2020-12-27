@@ -8942,10 +8942,10 @@ exports.new = function (req, res) {
     var participant = new Participant();
     participant.name = participant.name;
     participant.nim = participant.nim;
-    (session.id = "5fdc7a66b2ced16b7fcb3f3f"),
-      (session.number = 1),
-      (session.min = new Date("2020-12-21T15:00:00.000+07:00")),
-      (session.max = new Date("2020-12-25T01:00:00.000+07:00")),
+    (participant.session.id = "5fdc7a66b2ced16b7fcb3f3f"),
+      (participant.session.number = 1),
+      (participant.session.min = new Date("2020-12-21T15:00:00.000+07:00")),
+      (participant.session.max = new Date("2020-12-25T01:00:00.000+07:00")),
       // Save and validate
       participant.save(function (err) {
         if (err) return res.status(500).json(err);
