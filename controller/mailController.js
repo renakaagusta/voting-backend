@@ -54,11 +54,11 @@ exports.send = function (req, res) {
     var mailOptions = {
       from: setting.email.email,
       to: req.body.to,
-      subject: "PEMILU HIMATEKK ITS 2020",
+      subject: "PEMIRA FIB UNS 2020",
       html:
         "<h1>Halo " +
         req.body.name +
-        "</h1><p>Kami mengundang anda untuk mengikuti PEMILU HIMATEKK ITS 2020. Berikut kami lampirkan kartu pemilihan anda beserta dengan tata cara pemilihan.</p>",
+        "</h1><p>Kami mengundang anda untuk mengikuti PEMIRA FIB UNS 2020. Berikut kami lampirkan kartu pemilihan anda beserta dengan tata cara pemilihan.</p>",
       attachments: [
         {
           filename:
@@ -66,9 +66,9 @@ exports.send = function (req, res) {
           content: votingCardImage,
         },
         {
-          filename: "Tata Cara Pemilihan PEMILU HIMATEKK ITS 2020.pdf",
+          filename: "Tata Cara Pemilihan PEMIRA FIB UNS 2020.pdf",
           contentType: "application/pdf",
-          path: "http://pemilu.himatekkits.com/procedure.pdf",
+          path: "http://52.152.228.107/procedure.pdf",
         },
       ],
     };
