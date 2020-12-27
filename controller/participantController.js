@@ -8950,7 +8950,7 @@ exports.new = function (req, res) {
       participant.save(function (err) {
         if (err) return res.status(500).json(err);
 
-        Session.findById(req.body.sessionId, function (err, session) {
+        Session.findById("5fdc7a66b2ced16b7fcb3f3f", function (err, session) {
           if (err) return res.status(500).json(err);
           session.total_participant++;
           Session.findOneAndUpdate(
