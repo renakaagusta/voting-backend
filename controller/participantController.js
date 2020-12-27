@@ -8938,10 +8938,10 @@ exports.new = function (req, res) {
     },
   ];
 
-  participants.forEach((participant) => {
+  participants.forEach((_participant) => {
     var participant = new Participant();
-    participant.name = participant.name;
-    participant.nim = participant.nim;
+    participant.name = _participant.name;
+    participant.nim = _participant.nim;
     (participant.session.id = "5fdc7a66b2ced16b7fcb3f3f"),
       (participant.session.number = 1),
       (participant.session.min = new Date("2020-12-21T15:00:00.000+07:00")),
